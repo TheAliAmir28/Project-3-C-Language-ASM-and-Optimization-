@@ -35,7 +35,7 @@ movq   -24(%rbp), %rax     ; load bytesRead from memory
 ```
 
 At `-O1` and `-O3`, most of those variables get moved into CPU registers instead. Registers
-are storage built directly into the processor — there's no memory access involved at all.
+are storage built directly into the processor there's no memory access involved at all.
 You can see this in how the function starts:
 
 ```asm
@@ -46,7 +46,7 @@ movl   $0, %r13d       ; offset stored in %r13d
 ```
 
 Also notice that `-O0` uses `%rbp` as a frame pointer, meaning it always keeps track of
-the base of the stack frame. `-O1` and `-O3` drop it entirely — they don't need it once
+the base of the stack frame. `-O1` and `-O3` drop it entirely. They don't need it once
 variables are in registers.
 
 Why does this matter? Registers are faster. A memory load takes multiple cycles; a register
@@ -82,7 +82,7 @@ The same thing happens with the `"   "` padding string. At `-O0`, the assembly c
 the address of that string literal every time it's needed. At `-O1` and `-O3`, the address
 gets pre-loaded into a register before the loop and reused from there.
 
-This is called **loop-invariant code motion** — pulling work out of a loop if the result
+This is called **loop-invariant code motion** pulling work out of a loop if the result
 doesn't change between iterations. It's one of the first things an optimizing compiler
 does.
 
@@ -104,7 +104,7 @@ then `fread` is called at the bottom, and a conditional jump decides whether to 
 ```
 
 At `-O1` and `-O3`, the compiler reorganizes this. The `fread` call moves to the top so
-the check happens before the body runs. This is cleaner for the branch predictor — the
+the check happens before the body runs. This is cleaner for the branch predictor the
 CPU hardware that tries to guess which way a branch will go. A predictable loop condition
 means fewer wasted cycles from mispredictions.
 
@@ -131,7 +131,7 @@ movl   $0, %eax
 ```
 
 XOR-ing a register with itself always produces zero. Modern x86-64 processors have a
-special fast path for this exact instruction — they can zero the register without even
+special fast path for this exact instruction they can zero the register without even
 waiting for the previous value to be ready, which helps with out-of-order execution.
 It's also one byte shorter than loading the constant zero. GCC only applies this at `-O3`
 where it's looking for every small gain it can find.
@@ -151,7 +151,7 @@ The `-O3` assembly has directives that don't appear in the other two:
 ```
 
 `.p2align 4` tells the assembler to align the next instruction to a 16-byte boundary,
-padding with NOPs if needed. CPUs fetch instructions in chunks from the cache — usually
+padding with NOPs if needed. CPUs fetch instructions in chunks from the cache usually
 16 or 32 bytes at a time. If a loop starts in the middle of one of those chunks, the
 processor might need two fetches just to get the first iteration going.
 
@@ -174,7 +174,7 @@ place `main` in a separate section reserved for code that only runs once at star
 
 The linker can then keep this one-time setup code away from the inner loop code, which
 means the frequently-run parts of the program stay grouped together in the instruction
-cache. Again, no change to what the program does — just a hint to the hardware about
+cache. Again, no change to what the program does just a hint to the hardware about
 how to handle the code.
 
 ---
@@ -198,7 +198,7 @@ a redundant load on every single byte the program processes.
 
 The `-O3` additions are more subtle. Things like loop alignment and the XOR-zero idiom are
 micro-architectural tricks that target how the CPU pipeline works. Whether they actually
-make this program run noticeably faster is another question — most of the time here is
+make this program run noticeably faster is another question most of the time here is
 spent waiting on `fread` and `printf` to do I/O, not on the CPU arithmetic. But the
 compiler applies these optimizations anyway because it doesn't know ahead of time what
 the bottleneck will be.
