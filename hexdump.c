@@ -1,14 +1,3 @@
-/*
- * hexdump.c
- * Author: Ali Amir
- * 
- * Reads a binary file and outputs a formatted hex dump to stdout.
- * Format: <offset>  <16 hex bytes>  |<ASCII representation>|
- * Non-printable bytes are shown as '.' in the ASCII column.
- *
- * Usage: ./hexdump <filename>
- */
-
 #include <stdio.h>
 #include <ctype.h>
 
