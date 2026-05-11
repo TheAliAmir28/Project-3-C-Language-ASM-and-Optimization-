@@ -1,8 +1,7 @@
 # GCC Optimization Analysis: hexdump.c
 **Author:** Ali Amir  
-**Course:** CMSC 313 — Computer Organization  
-**Compiler:** GCC 14.2.0 (MSYS2/MinGW, x86-64 Windows)  
-**Flags Compared:** `-O0`, `-O1`, `-O3`
+**Course:** CMSC 313: Computer Organization and Assembly Language
+
 
 ---
 
